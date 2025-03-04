@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/create_game', {
+            const response = await fetch('https://themind-uji9.onrender.com/create_game', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/join_game', {
+            const response = await fetch('https://themind-uji9.onrender.com/join_game', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let socket;
     let gameState = null;
 
+    // Variáveis para armazenar estado anterior (cache)
+    let lastPlayedCards = [];
+    let lastPlayerHand = [];
+
     // Inicializar
     initGame();
 
@@ -87,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchGameState() {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/game_status/${gameId}`);
+            const response = await fetch(`https://themind-uji9.onrender.com/game_status/${gameId}`);
             
             if (!response.ok) {
                 throw new Error('Erro ao buscar o estado do jogo');
@@ -105,19 +109,22 @@ document.addEventListener('DOMContentLoaded', () => {
         // Salvar estado atual
         gameState = data;
         
-        // Atualizar informações do jogo
+        // Atualizar informações simples sem re-renderizar demais
         currentRound.textContent = data.current_round;
         livesCount.textContent = data.lives;
-        
-        // Atualizar lista de jogadores no lobby
         updatePlayersList(data.players);
-        
-        // Decidir qual tela exibir com base no estado do jogo
         updateGameScreen();
-        
-        // Atualizar cartas jogadas e mão do jogador
-        updatePlayedCards(data.played_cards);
-        updatePlayerHand(data.player_hands[playerName] || []);
+
+        // Atualiza apenas se houve mudança
+        if (JSON.stringify(lastPlayedCards) !== JSON.stringify(data.played_cards)) {
+            updatePlayedCards(data.played_cards);
+            lastPlayedCards = data.played_cards;
+        }
+        const newPlayerHand = data.player_hands[playerName] || [];
+        if (JSON.stringify(lastPlayerHand) !== JSON.stringify(newPlayerHand)) {
+            updatePlayerHand(newPlayerHand);
+            lastPlayerHand = newPlayerHand;
+        }
     }
     
     function updateGameScreen() {
@@ -190,11 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
             cardElement.className = 'card-item played';
             cardElement.textContent = card.card_value;
             
-            const playerNameElement = document.createElement('div');
-            playerNameElement.className = 'player-name';
-            playerNameElement.textContent = card.player_id;
-            
-            cardElement.appendChild(playerNameElement);
             playedCards.appendChild(cardElement);
         });
     }
@@ -230,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         try {
-            const response = await fetch('http://127.0.0.1:8000/play_card', {
+            const response = await fetch('https://themind-uji9.onrender.com/play_card', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -257,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     async function startGame() {
         try {
-            const response = await fetch('http://127.0.0.1:8000/start_game', {
+            const response = await fetch('https://themind-uji9.onrender.com/start_game', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -282,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     async function nextRound() {
         try {
-            const response = await fetch('http://127.0.0.1:8000/next_round', {
+            const response = await fetch('https://themind-uji9.onrender.com/next_round', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
