@@ -62,9 +62,18 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         socket.onmessage = (event) => {
-            console.log('Mensagem recebida:', event.data);
-            const data = JSON.parse(event.data);
-            updateGameState(data);
+            try {
+                const message = JSON.parse(event.data);
+                if(message.type === 'ping') {
+                    // Responde com pong imediatamente
+                    socket.send(JSON.stringify({type: 'pong', timestamp: message.timestamp}));
+                } else {
+                    console.log('Mensagem recebida:', message);
+                    updateGameState(message);
+                }
+            } catch(e) {
+                console.log('Mensagem não-JSON recebida:', event.data);
+            }
         };
         
         socket.onclose = () => {
@@ -331,6 +340,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Atualizar o estado do jogo a cada 5 segundos (fallback caso o WebSocket falhe)
-    setInterval(fetchGameState, 5000);
+    // Atualizar o estado do jogo a cada 300ms (fallback caso o WebSocket falhe)
+    setInterval(fetchGameState, 300);
 });

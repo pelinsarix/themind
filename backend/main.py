@@ -1,6 +1,7 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import json
+import asyncio, time
 from models import CreateGameRequest, JoinGameRequest, StartGameRequest, PlayCardRequest, NextRoundRequest, GameState
 from database import get_db_connection, create_tables, create_game, join_game, start_game, play_card, next_round, get_game_state
 
@@ -50,7 +51,23 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
     await manager.connect(game_id, websocket)
     try:
         while True:
-            await websocket.receive_text()  # Mantém a conexão viva
+            # Cria duas tasks: uma pra receber mensagens e outra pra enviar ping a cada 200ms
+            receive_task = asyncio.create_task(websocket.receive_text())
+            ping_task = asyncio.create_task(asyncio.sleep(0.2))
+            done, pending = await asyncio.wait([receive_task, ping_task], return_when=asyncio.FIRST_COMPLETED)
+            if ping_task in done:
+                # Envia ping com timestamp (o client pode usar para medir latência)
+                await websocket.send_text(json.dumps({"type": "ping", "timestamp": time.time()}))
+            if receive_task in done:
+                data = receive_task.result()
+                # Se a mensagem for um pong, pode ignorar; caso contrário, apenas mantenha a conexão
+                try:
+                    msg = json.loads(data)
+                    if msg.get("type") == "pong":
+                        # opcional: processar latência se desejar
+                        continue
+                except Exception:
+                    pass  # Trata outros dados recebidos se houver necessidade
     except WebSocketDisconnect:
         manager.disconnect(game_id, websocket)
 
