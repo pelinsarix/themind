@@ -3,80 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Mind - Jogo Colaborativo</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <title>The Mind: Conexão Cósmica</title>
+    <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <div class="space-background">
+        <div class="stars"></div>
+        <div class="twinkling"></div>
+    </div>
+    
     <div class="container">
-        <div class="logo">
-            <i class="fas fa-brain"></i>
+        <div class="logo space-logo">
             <h1>The Mind</h1>
         </div>
         
-        <div class="card home-card">
-            <h2>Bem-vindo ao The Mind</h2>
-            <p>Jogue em sincronia com seus amigos sem comunicação verbal!</p>
+        <div class="card home-card space-card">
+            <h2>Sincronize com o Cosmos</h2>
+            <p>Uma jornada telepática onde mentes se unem em silêncio através do espaço-tempo!</p>
             
             <div class="action-buttons">
                 <button id="createGame" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Criar Nova Partida
+                    <i class="fas fa-rocket"></i> Criar Nova Missão
                 </button>
                 <button id="joinGameBtn" class="btn btn-secondary">
-                    <i class="fas fa-sign-in-alt"></i> Entrar em Partida
+                    <i class="fas fa-satellite"></i> Entrar em Missão
                 </button>
             </div>
 
-            <div id="createGameForm" class="form hidden">
-                <h3>Criar Nova Partida</h3>
+            <form id="createGameForm" class="form hidden">
+                <h3>Iniciar Nova Missão Espacial</h3>
                 <div class="form-group">
-                    <label for="playerName">Seu Nome</label>
-                    <input type="text" id="playerName" placeholder="Digite seu nome" required>
+                    <label for="playerName">Nome do Astronauta</label>
+                    <input type="text" id="playerName" placeholder="Insira seu nome de explorador" required>
                 </div>
-                <button id="createGameSubmit" class="btn btn-submit">Criar Partida</button>
-            </div>
+                <button type="submit" id="createGameSubmit" class="btn btn-submit">Lançar Missão</button>
+            </form>
             
-            <div id="joinGameForm" class="form hidden">
-                <h3>Entrar em Partida</h3>
+            <form id="joinGameForm" class="form hidden">
+                <h3>Entrar na Nave Principal</h3>
                 <div class="form-group">
-                    <label for="gameCode">Código da Partida</label>
-                    <input type="text" id="gameCode" placeholder="Digite o código" required maxlength="6">
+                    <label for="gameCode">Código de Acesso Estelar</label>
+                    <input type="text" id="gameCode" placeholder="Insira o código galáctico" required maxlength="6">
                 </div>
                 <div class="form-group">
-                    <label for="joinPlayerName">Seu Nome</label>
-                    <input type="text" id="joinPlayerName" placeholder="Digite seu nome" required>
+                    <label for="joinPlayerName">Nome do Astronauta</label>
+                    <input type="text" id="joinPlayerName" placeholder="Insira seu nome de explorador" required>
                 </div>
-                <button id="joinGameSubmit" class="btn btn-submit">Entrar</button>
-            </div>
+                <button type="submit" id="joinGameSubmit" class="btn btn-submit">Embarcar na Missão</button>
+            </form>
 
             <div id="gameCreatedInfo" class="info-box hidden">
-                <h3>Partida Criada!</h3>
-                <p>Compartilhe este código com seus amigos:</p>
+                <h3>Missão Iniciada!</h3>
+                <p>Transmita este código para sua tripulação:</p>
                 <div class="game-code">
                     <span id="generatedGameCode"></span>
                     <button id="copyCode" class="btn btn-small">
                         <i class="fas fa-copy"></i>
                     </button>
                 </div>
-                <button id="goToLobby" class="btn btn-primary">Ir para a Sala de Espera</button>
+                <button id="goToLobby" class="btn btn-primary">Ir para a Base Espacial</button>
             </div>
         </div>
 
-        <div class="card rules-card">
-            <h3>Como Jogar</h3>
+        <div class="card rules-card space-card">
+            <h3>Instruções da Missão</h3>
             <ul>
-                <li><i class="fas fa-users"></i> Trabalhe em equipe para jogar todas as cartas em ordem crescente</li>
-                <li><i class="fas fa-comment-slash"></i> Sem comunicação verbal ou sinais</li>
-                <li><i class="fas fa-heartbeat"></i> Cada erro custa uma vida</li>
-                <li><i class="fas fa-level-up-alt"></i> Complete rodadas para avançar no jogo</li>
+                <li><i class="fas fa-user-astronaut"></i> Trabalhe com sua tripulação para jogar cartas em sequência cósmica</li>
+                <li><i class="fas fa-comment-slash"></i> Comunicação telepática apenas - sem sinais ou palavras</li>
+                <li><i class="fas fa-meteor"></i> Cada erro custa uma vida estelar</li>
+                <li><i class="fas fa-rocket"></i> Complete rodadas para avançar pelos níveis do espaço profundo</li>
             </ul>
         </div>
         
         <footer>
-            <p>&copy; 2023 The Mind - Jogo Colaborativo Multiplayer</p>
+            <p>&copy; 2023 The Mind: Conexão Cósmica - Uma Aventura Interestelar</p>
         </footer>
     </div>
     
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/space-animation.js"></script>
 </body>
 </html>
