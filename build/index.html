@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Mind - Jogo Colaborativo</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Adicionar elementos de background espacial -->
+    <div class="space-background">
+        <div class="stars"></div>
+        <div class="twinkling"></div>
+        <div class="shooting-stars"></div>
+    </div>
+
+    <div class="container">
+        <div class="logo space-logo">
+            <i class="fas fa-brain"></i>
+            <h1>The Mind</h1>
+        </div>
+        
+        <div class="card home-card space-card">
+            <h2>Bem-vindo ao The Mind</h2>
+            <p>Jogue em sincronia com seus amigos sem comunicação verbal!</p>
+            
+            <div class="action-buttons">
+                <button id="createGame" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Criar Nova Partida
+                </button>
+                <button id="joinGameBtn" class="btn btn-secondary">
+                    <i class="fas fa-sign-in-alt"></i> Entrar em Partida
+                </button>
+            </div>
+
+            <div id="createGameForm" class="form hidden">
+                <h3>Criar Nova Partida</h3>
+                <div class="form-group">
+                    <label for="playerName">Seu Nome</label>
+                    <input type="text" id="playerName" placeholder="Digite seu nome" required>
+                </div>
+                <button id="createGameSubmit" class="btn btn-submit">Criar Partida</button>
+            </div>
+            
+            <div id="joinGameForm" class="form hidden">
+                <h3>Entrar em Partida</h3>
+                <div class="form-group">
+                    <label for="gameCode">Código da Partida</label>
+                    <input type="text" id="gameCode" placeholder="Digite o código" required maxlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="joinPlayerName">Seu Nome</label>
+                    <input type="text" id="joinPlayerName" placeholder="Digite seu nome" required>
+                </div>
+                <button id="joinGameSubmit" class="btn btn-submit">Entrar</button>
+            </div>
+
+            <div id="gameCreatedInfo" class="info-box hidden">
+                <h3>Partida Criada!</h3>
+                <p>Compartilhe este código com seus amigos:</p>
+                <div class="game-code">
+                    <span id="generatedGameCode"></span>
+                    <button id="copyCode" class="btn btn-small">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+                <button id="goToLobby" class="btn btn-primary">Ir para a Sala de Espera</button>
+            </div>
+        </div>
+
+        <div class="card rules-card space-card">
+            <h3>Como Jogar</h3>
+            <ul>
+                <li><i class="fas fa-users"></i> Trabalhe em equipe para jogar todas as cartas em ordem crescente</li>
+                <li><i class="fas fa-comment-slash"></i> Sem comunicação verbal ou sinais</li>
+                <li><i class="fas fa-heartbeat"></i> Cada erro custa uma vida</li>
+                <li><i class="fas fa-level-up-alt"></i> Complete rodadas para avançar no jogo</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 The Mind</p>
+        </footer>
+    </div>
+    
+    <script type="module" src="assets/js/main.js"></script>
+    <!-- Adicionar o script de animação espacial -->
+    <script src="assets/js/space-animation.js"></script>
+</body>
+</html>

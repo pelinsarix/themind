@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Mind: Conexão Cósmica - Missão em Andamento</title>
+    <link rel="stylesheet" href="assets/css/game.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="space-background">
+        <div class="stars"></div>
+        <div class="twinkling"></div>
+    </div>
+
+    <div class="container game-container">
+        <!-- Tela de Lobby -->
+        <div id="lobbyScreen" class="screen">
+            <div class="game-header">
+                <div class="logo space-logo">
+                    <h1>The Mind</h1>
+                </div>
+                <div class="game-info">
+                    <h3>Base Espacial</h3>
+                    <div class="game-code">
+                        <span>Código Estelar: </span>
+                        <span id="lobbyGameCode" class="glowing-text"></span>
+                        <button id="copyLobbyCode" class="btn btn-small">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card lobby-card space-card">
+                <h3>Tripulação Galáctica</h3>
+                <ul id="playersList" class="players-list">
+                    <!-- Jogadores serão adicionados dinamicamente -->
+                </ul>
+                
+                <div id="lobbyActions" class="action-buttons">
+                    <button id="startGameBtn" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i> Iniciar Missão
+                    </button>
+                </div>
+                
+                <p class="waiting-text">Aguardando astronautas se conectarem ao portal telepático...</p>
+            </div>
+        </div>
+
+        <!-- Tela de Jogo -->
+        <div id="gameScreen" class="screen hidden">
+            <div class="game-header">
+                <div class="game-status">
+                    <div class="game-info-item">
+                        <i class="fas fa-planet-ringed"></i>
+                        <span>Nível Espacial: </span>
+                        <span id="currentRound" class="glowing-text">1</span>
+                    </div>
+                    <div class="game-info-item">
+                        <i class="fas fa-meteor"></i>
+                        <span>Escudos: </span>
+                        <span id="livesCount" class="glowing-text">3</span>
+                    </div>
+                </div>
+                <div class="game-code small">
+                    <span>Código Estelar: </span>
+                    <span id="gameCodeDisplay" class="glowing-text"></span>
+                </div>
+            </div>
+
+            <div class="game-area">
+                <div class="card played-cards-area space-card">
+                    <h3>Portal Dimensional</h3>
+                    <p class="cosmic-subtitle">Cartas enviadas ao cosmos</p>
+                    <div id="playedCards" class="played-cards">
+                        <!-- Cartas jogadas aparecerão aqui -->
+                    </div>
+                </div>
+
+                <div class="card player-hand space-card">
+                    <h3>Sua Frequência Mental</h3>
+                    <p class="cosmic-subtitle">Jogue em ordem cósmica crescente</p>
+                    <div id="playerHand" class="hand-cards">
+                        <!-- Cartas do jogador aparecerão aqui -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="roundEndActions" class="action-buttons hidden">
+                <button id="nextRoundBtn" class="btn btn-primary">
+                    <i class="fas fa-arrow-right"></i> Próximo Nível Estelar
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela de Fim de Jogo -->
+        <div id="gameOverScreen" class="screen hidden">
+            <div class="card game-over-card space-card">
+                <div class="cosmic-result"></div>
+                <h2 id="gameOverTitle">Fim da Expedição</h2>
+                <p id="gameOverMessage"></p>
+                <button id="returnHomeBtn" class="btn btn-primary">
+                    <i class="fas fa-space-shuttle"></i> Retornar à Base
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Elemento de mensagem movido para fora dos containers principais -->
+    <div id="gameMessage" class="game-message hidden">
+        <!-- Mensagens do jogo aparecerão aqui -->
+    </div>
+    
+    <script type="module" src="assets/js/game.js"></script>
+    <script src="assets/js/space-animation.js"></script>
+</body>
+</html>
