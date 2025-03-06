@@ -287,6 +287,19 @@ body {
     transform: translateY(-3px);
 }
 
+.btn-restart{
+    background: linear-gradient(135deg, #8a2be2, #4e6ef2);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 77, 77, 0.4);
+    margin-top: 100px;
+    width: 40%;
+}
+
+.btn-restart:hover {
+    box-shadow: 0 6px 20px rgba(255, 77, 77, 0.6);
+    transform: translateY(-3px);
+}
+
 .btn-small {
     padding: 5px 10px;
     font-size: 0.8rem;
@@ -300,8 +313,35 @@ body {
 
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+/* Animação para indicar perda de vida */
+@keyframes lifeLost {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); color: var(--danger-color); text-shadow: 0 0 15px var(--danger-color); }
+    100% { transform: scale(1); }
+}
+
+.life-lost {
+    animation: lifeLost 1s ease-in-out;
+}
+
+/* Efeito quando uma carta é jogada e há um erro */
+.card-error {
+    box-shadow: 0 0 20px var(--danger-color) !important;
+    border: 2px solid var(--danger-color) !important;
+}
+
+/* Efeito fadeIn-Out para indicar mudanças no estado do jogo */
+@keyframes highlightChange {
+    0% { background-color: rgba(255, 204, 0, 0.3); }
+    100% { background-color: transparent; }
+}
+
+.highlight-change {
+    animation: highlightChange 2s ease-out forwards;
 }
 
 .lobby-card {
@@ -488,6 +528,39 @@ body {
     backdrop-filter: blur(5px);
 }
 
+/* Nova classe para mensagens fixas */
+.fixed-message {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 30%;
+    max-width: 80%;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.5s ease forwards;
+    margin: 0;
+
+    @media (max-aspect-ratio: 4/3) {
+        width: 80%;
+        bottom: 140px;
+    }
+}
+
+.fade-out {
+    animation: fadeOut 0.5s ease forwards;
+}
+
+@keyframes slideUp {
+    from { transform: translate(-50%, 20px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translate(-50%, 0); }
+    to { opacity: 0; transform: translate(-50%, -20px); }
+}
+
 .message-success {
     background-color: rgba(0, 255, 170, 0.2);
     color: var(--success-color);
@@ -519,6 +592,11 @@ body {
     padding: 40px;
     position: relative;
     overflow: hidden;
+    top: 200px;
+
+    @media (max-aspect-ratio: 4/3) {
+        top: 50px;
+    }
 }
 
 .cosmic-result {
@@ -558,6 +636,9 @@ body {
     font-size: 2.5rem;
     text-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
     animation: glow 3s ease-in-out infinite alternate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .game-over-card p {

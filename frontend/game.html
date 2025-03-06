@@ -87,10 +87,6 @@
                 </div>
             </div>
 
-            <div id="gameMessage" class="game-message hidden">
-                <!-- Mensagens do jogo aparecerão aqui -->
-            </div>
-
             <div id="roundEndActions" class="action-buttons hidden">
                 <button id="nextRoundBtn" class="btn btn-primary">
                     <i class="fas fa-arrow-right"></i> Próximo Nível Estelar
@@ -111,7 +107,12 @@
         </div>
     </div>
     
-    <script src="assets/js/game.js"></script>
+    <!-- Elemento de mensagem movido para fora dos containers principais -->
+    <div id="gameMessage" class="game-message hidden">
+        <!-- Mensagens do jogo aparecerão aqui -->
+    </div>
+    
+    <script type="module" src="assets/js/game.js"></script>
     <script src="assets/js/space-animation.js"></script>
 </body>
 </html>

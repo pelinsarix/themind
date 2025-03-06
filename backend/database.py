@@ -128,16 +128,45 @@ def start_game(conn, game_id):
     distribute_cards(conn, game_id, game['current_round'], len(players))
     return True
 
+# Reinicia a rodada atual
+def restart_current_round(conn, game_id):
+    game = conn.execute('SELECT * FROM games WHERE game_id = ?', (game_id,)).fetchone()
+    if not game:
+        return False
+    
+    current_round = game['current_round']
+    
+    # Limpar as cartas jogadas da rodada atual
+    conn.execute('DELETE FROM played_cards WHERE game_id = ? AND round_number = ?', (game_id, current_round))
+    
+    # Limpar as mãos dos jogadores da rodada atual
+    conn.execute('DELETE FROM player_hands WHERE game_id = ? AND round_number = ?', (game_id, current_round))
+    
+    # Redistribuir cartas para a rodada atual
+    players = conn.execute('SELECT player_id FROM players WHERE game_id = ?', (game_id,)).fetchall()
+    num_players = len(players)
+    distribute_cards(conn, game_id, current_round, num_players)
+    
+    # Atualizar o status do jogo para playing
+    conn.execute('UPDATE games SET status = ? WHERE game_id = ?', ('playing', game_id))
+    conn.commit()
+    
+    return True
+
 # Registra uma carta jogada
 def play_card(conn, game_id, player_id, card_value):
     game = conn.execute('SELECT * FROM games WHERE game_id = ?', (game_id,)).fetchone()
     if not game or game['status'] != 'playing':
         return 'invalid_game'
+    
     hand = conn.execute('SELECT card_value FROM player_hands WHERE game_id = ? AND round_number = ? AND player_id = ?',
                         (game_id, game['current_round'], player_id)).fetchall()
     hand_values = [row['card_value'] for row in hand]
+    
     if card_value not in hand_values:
         return 'invalid_card'
+    
+    # Verificar se a carta é maior que a última jogada
     last_played = conn.execute('SELECT MAX(card_value) FROM played_cards WHERE game_id = ? AND round_number = ?',
                                (game_id, game['current_round'])).fetchone()[0]
     if last_played is not None and card_value <= last_played:
@@ -148,22 +177,48 @@ def play_card(conn, game_id, player_id, card_value):
             conn.execute('UPDATE games SET status = ? WHERE game_id = ?', ('gameOver', game_id))
             conn.commit()
             return 'game_over'
-        return 'invalid_order'
+        # Reiniciar a rodada após perder uma vida
+        restart_current_round(conn, game_id)
+        return 'restart_round'
+    
+    # Verificar se outros jogadores têm cartas menores
+    other_players = conn.execute('SELECT DISTINCT player_id FROM players WHERE game_id = ? AND player_id != ?', (game_id, player_id)).fetchall()
+    
+    has_smaller_card = False
+    for other_player in other_players:
+        other_player_id = other_player['player_id']
+        smaller_cards = conn.execute('SELECT COUNT(*) FROM player_hands WHERE game_id = ? AND round_number = ? AND player_id = ? AND card_value < ?',
+                                     (game_id, game['current_round'], other_player_id, card_value)).fetchone()[0]
+        
+        if smaller_cards > 0:
+            has_smaller_card = True
+            break
+    
+    if has_smaller_card:
+        conn.execute('UPDATE games SET lives = lives - 1 WHERE game_id = ?', (game_id,))
+        conn.commit()
+        game = conn.execute('SELECT * FROM games WHERE game_id = ?', (game_id,)).fetchone()
+        if game['lives'] <= 0:
+            conn.execute('UPDATE games SET status = ? WHERE game_id = ?', ('gameOver', game_id))
+            conn.commit()
+            return 'game_over'
+        # Reiniciar a rodada após perder uma vida
+        restart_current_round(conn, game_id)
+        return 'restart_round'
+    
     # Registra a jogada
-    play_order = conn.execute('SELECT COUNT(*) FROM played_cards WHERE game_id = ? AND round_number = ?',
-                              (game_id, game['current_round'])).fetchone()[0] + 1
-    conn.execute('INSERT INTO played_cards (game_id, round_number, player_id, card_value, play_order) VALUES (?, ?, ?, ?, ?)',
-                 (game_id, game['current_round'], player_id, card_value, play_order))
-    conn.execute('DELETE FROM player_hands WHERE game_id = ? AND round_number = ? AND player_id = ? AND card_value = ?',
-                 (game_id, game['current_round'], player_id, card_value))
+    play_order = conn.execute('SELECT COUNT(*) FROM played_cards WHERE game_id = ? AND round_number = ?', (game_id, game['current_round'])).fetchone()[0] + 1
+    conn.execute('INSERT INTO played_cards (game_id, round_number, player_id, card_value, play_order) VALUES (?, ?, ?, ?, ?)', (game_id, game['current_round'], player_id, card_value, play_order))
+    conn.execute('DELETE FROM player_hands WHERE game_id = ? AND round_number = ? AND player_id = ? AND card_value = ?', (game_id, game['current_round'], player_id, card_value))
     conn.commit()
+    
     # Verifica se a rodada terminou
-    remaining_hands = conn.execute('SELECT COUNT(*) FROM player_hands WHERE game_id = ? AND round_number = ?',
-                                   (game_id, game['current_round'])).fetchone()[0]
+    remaining_hands = conn.execute('SELECT COUNT(*) FROM player_hands WHERE game_id = ? AND round_number = ?', (game_id, game['current_round'])).fetchone()[0]
     if remaining_hands == 0:
         conn.execute('UPDATE games SET status = ? WHERE game_id = ?', ('roundEnd', game_id))
         conn.commit()
         return 'round_end'
+    
     return 'success'
 
 # Avança para a próxima rodada

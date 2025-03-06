@@ -28,6 +28,8 @@ body {
     position: relative;
 }
 
+
+
 /* Efeito de fundo espacial simplificado - apenas estrelas piscando fixas */
 .space-background {
     position: fixed;
@@ -151,7 +153,7 @@ body {
 .card {
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    padding: 30px;
+    padding: 50px;
     margin-bottom: 20px;
     transition: var(--transition);
 }

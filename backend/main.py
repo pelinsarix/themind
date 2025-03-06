@@ -117,7 +117,7 @@ async def play_card_endpoint(request: PlayCardRequest):
     elif result == 'invalid_card':
         conn.close()
         raise HTTPException(status_code=400, detail="Card not in player's hand")
-    elif result == 'invalid_order':
+    elif result == 'invalid_order' or result == 'restart_round':
         state = get_game_state(conn, request.game_id)
         conn.close()
         await manager.broadcast(request.game_id, json.dumps(state))
